@@ -23,7 +23,7 @@ app.get("/", (request, response) => {
 });
 
 // send the default array of dreams to the webpage
-app.get("/dreams", (request, response) => {
+app.get("/callbacks/sign_in_with_apple", (request, response) => {
   // express helps us take JS objects and send them as JSON
   response.json(dreams);
 });
