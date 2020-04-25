@@ -10,8 +10,9 @@
     "start": "node server.js"
   },
   "dependencies": {
+    "apple-auth": "1.0.5",
     "express": "^4.17.1",
-    "apple-auth": "1.0.5"
+    "jsonwebtoken": "^8.5.1"
   },
   "engines": {
     "node": "12.x"
