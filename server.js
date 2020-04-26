@@ -8,7 +8,7 @@ const bodyParser = require("body-parser");
 
 const app = express();
 
-app.use(bodyParser.urlencoded({}));
+app.use(bodyParser.urlencoded({extended: false}));
 
 // make all the files in 'public' available
 // https://expressjs.com/en/starter/static-files.html
@@ -44,11 +44,12 @@ app.post("/sign_in_with_apple", async (request, response) => {
       redirect_uri: "", // does not matter here, as this is already the callback that verifies the token after the redirection
       key_id: process.env.KEY_ID
     },
-    process.env.KEY_CONTENTS.split("\\n").join("\n"),
+    process.env.KEY_CONTENTS.replace(/|/g,"\r\n"),
     "text"
   );
 
-  console.log(process.env.KEY_CONTENTS.substring(0, 100));
+  // console.log(process.env.KEY_CONTENTS.split('\n').slice(0,2));
+  console.log(process.env.KEY_CONTENTS.replace(/|/g,"\r\n").substring(0, 100));
 
   const accessToken = await auth.accessToken(request.params.code);
 
