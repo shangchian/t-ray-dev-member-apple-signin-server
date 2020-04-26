@@ -8,7 +8,7 @@ const bodyParser = require("body-parser");
 
 const app = express();
 
-app.use(bodyParser.urlencoded({extended: false}));
+app.use(bodyParser.urlencoded({ extended: false }));
 
 // make all the files in 'public' available
 // https://expressjs.com/en/starter/static-files.html
@@ -39,19 +39,21 @@ app.post("/callbacks/sign_in_with_apple", (request, response) => {
 app.post("/sign_in_with_apple", async (request, response) => {
   const auth = new AppleAuth(
     {
-      client_id: process.env.CLIENT_ID,
+      client_id: process.env.CLIENT_ID, // use the app id for native apps? https://forums.developer.apple.com/thread/118135
       team_id: process.env.TEAM_ID,
-      redirect_uri: "", // does not matter here, as this is already the callback that verifies the token after the redirection
+      redirect_uri:
+        "https://flutter-sign-in-with-apple-example.glitch.me/callbacks/sign_in_with_apple", // does not matter here, as this is already the callback that verifies the token after the redirection
       key_id: process.env.KEY_ID
     },
-    process.env.KEY_CONTENTS.replace(/|/g,"\r\n"),
+    process.env.KEY_CONTENTS.replace(/\|/g, "\n"),
     "text"
   );
 
-  // console.log(process.env.KEY_CONTENTS.split('\n').slice(0,2));
-  console.log(process.env.KEY_CONTENTS.replace(/|/g,"\r\n").substring(0, 100));
+  console.log(process.env.KEY_CONTENTS.replace(/\|/g, "\n").substring(0, 100));
 
-  const accessToken = await auth.accessToken(request.params.code);
+  console.log(request.query.code);
+  
+  const accessToken = await auth.accessToken(request.query.code);
 
   const idToken = jwt.decode(accessToken.id_token);
 
