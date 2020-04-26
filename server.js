@@ -1,12 +1,14 @@
 // server.js
 // where your node app starts
 
-// we've started you off with Express (https://expressjs.com/)
-// but feel free to use whatever libraries or frameworks you'd like through `package.json`.
-const express = require("express");
-const app = express();
+const express = require('express');
 const AppleAuth = require('apple-auth');
 const jwt = require('jsonwebtoken');
+const bodyParser = require('body-parser');
+
+const app = express();
+
+app.use(bodyParser.urlencoded());
 
 // make all the files in 'public' available
 // https://expressjs.com/en/starter/static-files.html
@@ -19,9 +21,7 @@ app.get("/", (request, response) => {
 
 // The callback route used for Android, which will send the callback parameters from Apple into the Android app.
 // This is done using a deeplink, which will cause the Chrome Custom Tab to be dismissed and providing the parameters from Apple back to the app.
-app.post("/callbacks/sign_in_with_apple", (request, response) => {
-  console.log(request);
-  
+app.post("/callbacks/sign_in_with_apple", (request, response) => {  
   const redirect = `intent://callback?${new URLSearchParams(request.body).toString()}#Intent;package=${process.env.ANDROID_PACKAGE_IDENTIFIER};scheme=signinwithapple;end`;
 
   console.log(`Redirecting to ${redirect}`);
