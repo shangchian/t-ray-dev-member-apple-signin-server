@@ -19,10 +19,12 @@ app.get("/", (request, response) => {
 
 // The callback route used for Android, which will send the callback parameters from Apple into the Android app.
 // This is done using a deeplink, which will cause the Chrome Custom Tab to be dismissed and providing the parameters from Apple back to the app.
-app.get("/callbacks/sign_in_with_apple", (request, response) => {
-  const redirect = `intent://callback?${new URLSearchParams(req.body).toString()}#Intent;package=${process.env.ANDROID_PACKAGE_IDENTIFIER};scheme=signinwithapple;end`;
+app.post("/callbacks/sign_in_with_apple", (request, response) => {
+  console.log(request);
+  
+  const redirect = `intent://callback?${new URLSearchParams(request.body).toString()}#Intent;package=${process.env.ANDROID_PACKAGE_IDENTIFIER};scheme=signinwithapple;end`;
 
-  console.log('Redirecting to ${redirect}');
+  console.log(`Redirecting to ${redirect}`);
 
   response.redirect(307, redirect);
 });
@@ -46,7 +48,7 @@ app.post("/sign_in_with_apple", async (request, response) => {
 
   // `userEmail` and `userName` will only be provided for the initial authorization with your app
   const userEmail = idToken.email;
-  const { name: userName } = JSON.parse(req.body.user);
+  const { name: userName } = JSON.parse(request.body.user);
 
   // 👷🏻‍♀️ TODO: Use the values provided create a new session for the user in your system
   const sessionID = `NEW SESSION ID for ${userID} / ${userEmail} / ${userName}`;
