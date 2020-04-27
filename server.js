@@ -39,7 +39,12 @@ app.post("/callbacks/sign_in_with_apple", (request, response) => {
 app.post("/sign_in_with_apple", async (request, response) => {
   const auth = new AppleAuth(
     {
-      client_id: process.env.CLIENT_ID, // use the app id for native apps? https://forums.developer.apple.com/thread/118135
+      // use the bundle ID as client ID for native apps, else use the service ID for web-auth flows
+      // https://forums.developer.apple.com/thread/118135
+      client_id:
+        request.query.useBundleId === "true"
+          ? process.env.BUNDLE_ID
+          : process.env.SERVICE_ID,
       team_id: process.env.TEAM_ID,
       redirect_uri:
         "https://flutter-sign-in-with-apple-example.glitch.me/callbacks/sign_in_with_apple", // does not matter here, as this is already the callback that verifies the token after the redirection
@@ -48,7 +53,9 @@ app.post("/sign_in_with_apple", async (request, response) => {
     process.env.KEY_CONTENTS.replace(/\|/g, "\n"),
     "text"
   );
-  
+
+  console.log(request.query);
+
   const accessToken = await auth.accessToken(request.query.code);
 
   const idToken = jwt.decode(accessToken.id_token);
