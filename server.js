@@ -54,7 +54,6 @@ app.post("/sign_in_with_apple", async (request, response) => {
     "text"
   );
 
-  console.log(request.query);
 
   const accessToken = await auth.accessToken(request.query.code);
 
