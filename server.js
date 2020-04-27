@@ -54,6 +54,7 @@ app.post("/sign_in_with_apple", async (request, response) => {
     "text"
   );
 
+  console.log(request.query);
 
   const accessToken = await auth.accessToken(request.query.code);
 
@@ -61,9 +62,11 @@ app.post("/sign_in_with_apple", async (request, response) => {
 
   const userID = idToken.sub;
 
+  console.log(idToken);
+
   // `userEmail` and `userName` will only be provided for the initial authorization with your app
   const userEmail = idToken.email;
-  const { name: userName } = JSON.parse(request.query.user || "{}");
+  const userName = `${request.query.firstName} ${request.query.lastName}`;
 
   // 👷🏻‍♀️ TODO: Use the values provided create a new session for the user in your system
   const sessionID = `NEW SESSION ID for ${userID} / ${userEmail} / ${userName}`;
