@@ -46,9 +46,9 @@ app.post("/sign_in_with_apple", async (request, response) => {
           ? process.env.BUNDLE_ID
           : process.env.SERVICE_ID,
       team_id: process.env.TEAM_ID,
-      // redirect_uri:
-      //   "https://flutter-sign-in-with-apple-example.glitch.me/callbacks/sign_in_with_apple",
-      redirect_uri: "https://siwa-flutter-plugin.dev/", // use the one which was used for the initial load
+      redirect_uri:
+        "https://flutter-sign-in-with-apple-example.glitch.me/callbacks/sign_in_with_apple",
+      // redirect_uri: "https://siwa-flutter-plugin.dev/", // use the one which was used for the initial load
       key_id: process.env.KEY_ID
     },
     process.env.KEY_CONTENTS.replace(/\|/g, "\n"),
